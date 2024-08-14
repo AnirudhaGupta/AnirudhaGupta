@@ -1,0 +1,54 @@
+#include <iostream>
+using namespace std;
+
+int possible(int arr[], int size, int mid, int m) {
+  int day = 1;       // Start with the first day
+  int totaltime = 0; // Time allocated for the current day
+
+  for (int i = 0; i < size; i++) {
+    if (totaltime + arr[i] <= mid) {
+      totaltime += arr[i];
+    } else {
+      day++;
+      if (day > m || arr[i] > mid) {
+        return 0; // Not feasible
+      }
+      totaltime = arr[i];
+    }
+  }
+  return 1; // Feasible
+}
+
+int main() {
+  int arr[] = {30, 20, 10, 40, 5, 45};
+  int size = 6; // Array size
+  int sum = 0;
+
+  // Calculate the sum of all elements
+  for (int i = 0; i < size; i++) {
+    sum += arr[i];
+  }
+
+  int m;
+  cin >> m; // Number of days allowed
+
+  int s = 0;   // Start from the max element
+  int e = sum; // End at the sum of all elements
+  int answer = -1;
+
+  while (s <= e) {
+    int mid = s + (e - s) / 2;
+    cout << "Checking mid = " << mid << endl; // Debug: print mid
+
+    if (possible(arr, size, mid, m)) {
+      answer = mid; // Update answer if feasible
+      cout << "Feasible workload found: " << answer
+           << endl; // Debug: print feasible result
+      e = mid - 1;  // Try for a smaller maximum workload
+    } else {
+      s = mid + 1; // Increase the minimum possible workload
+    }
+  }
+
+  cout << "Minimum maximum workload: " << answer << endl; // Final result
+}
